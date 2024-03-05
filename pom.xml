@@ -54,6 +54,12 @@
             <version>${springdoc.version}</version>
         </dependency>
 
+        <!--Thymeleaf-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
         <!--cache-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
