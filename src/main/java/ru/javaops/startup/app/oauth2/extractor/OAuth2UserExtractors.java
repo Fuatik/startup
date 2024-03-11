@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 public class OAuth2UserExtractors {
     @Bean("github")
     BaseOAuth2UserExtractor githubExtractor() {
-        return new BaseOAuth2UserExtractor("email", "name", null) {
+        return new BaseOAuth2UserExtractor("email", "name", null, "avatar_url") {
             @Override
             public String getFirstName() {
                 String name = super.getFirstName();
@@ -18,7 +18,7 @@ public class OAuth2UserExtractors {
 
     @Bean("gitlab")
     BaseOAuth2UserExtractor gitlabExtractor() {
-        return new BaseOAuth2UserExtractor("email", "name", null) {
+        return new BaseOAuth2UserExtractor("email", "name", null, "avatar_url") {
             @Override
             public String getFirstName() {
                 String name = super.getFirstName();
@@ -29,11 +29,17 @@ public class OAuth2UserExtractors {
 
     @Bean("yandex")
     BaseOAuth2UserExtractor yandexExtractor() {
-        return new BaseOAuth2UserExtractor("default_email", "first_name", "last_name");
+        return new BaseOAuth2UserExtractor("default_email", "first_name", "last_name", "default_avatar_id") {
+            @Override
+            public String getAvatarUrl() {
+                // https://yandex.ru/dev/id/doc/ru/user-information#avatar-access
+                return String.format("https://avatars.yandex.net/get-yapic/%s/islands-middle", super.getAvatarUrl());
+            }
+        };
     }
 
     @Bean("google")
     BaseOAuth2UserExtractor googleExtractor() {
-        return new BaseOAuth2UserExtractor("email", "given_name", "family_name");
+        return new BaseOAuth2UserExtractor("email", "given_name", "family_name", "picture");
     }
 }

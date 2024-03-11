@@ -32,6 +32,6 @@ public class AuthUserService extends DefaultOAuth2UserService {
         // get or create
         final String firstName = userExtractor.getFirstName();
         return new AuthUser(oAuth2User, service.oauth2Login(email,
-                () -> new User(null, email, firstName != null ? firstName : email, userExtractor.getLastName(), Role.USER)));
+                () -> new User(null, email, firstName != null ? firstName : email, userExtractor.getLastName(), userExtractor.getAvatarUrl(), Role.USER)));
     }
 }

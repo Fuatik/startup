@@ -17,9 +17,9 @@ public class UserTestData {
     public static final String ADMIN_MAIL = "admin@gmail.com";
     public static final String GUEST_MAIL = "guest@gmail.com";
 
-    public static final User user = new User(USER_ID, USER_MAIL, "User", "UserLastName", Role.USER);
-    public static final User admin = new User(ADMIN_ID, ADMIN_MAIL, "Admin", "AdminLastName", Role.ADMIN, Role.USER);
-    public static final User guest = new User(GUEST_ID, GUEST_MAIL, "Guest", "GuestLastName");
+    public static final User user = new User(USER_ID, USER_MAIL, "User", "UserLastName", null, Role.USER);
+    public static final User admin = new User(ADMIN_ID, ADMIN_MAIL, "Admin", "AdminLastName", null, Role.ADMIN, Role.USER);
+    public static final User guest = new User(GUEST_ID, GUEST_MAIL, "Guest", "GuestLastName", null);
 
     public static UserTo getNewTo() {
         return new UserTo(null, "new@gmail.com", "New", "NewLastName");
@@ -30,10 +30,10 @@ public class UserTestData {
     }
 
     public static User getNew() {
-        return new User(null, "new@gmail.com", "New", "NewLastName", Role.USER);
+        return new User(null, "new@gmail.com", "New", "NewLastName", null, Role.USER);
     }
 
     public static User getUpdated() {
-        return new User(USER_ID, USER_MAIL, "UpdatedName", "UpdatedLastName", Role.ADMIN);
+        return new User(USER_ID, USER_MAIL, "UpdatedName", "UpdatedLastName", null, Role.ADMIN);
     }
 }

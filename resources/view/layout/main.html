@@ -35,7 +35,12 @@
                 </li>
                 <th:block th:if="${authUser!=null || appUser!=null}">
                     <li th:if="${authUser!=null}" class="nav-item pb-1">
-                        <a class="btn btn-outline-warning me-2" href="/view/auth/profile"><span class="fa fa-user"></span></a>
+                        <a th:if="${authUser.user.avatarUrl==null}" class="btn btn-outline-warning me-2" href="/view/auth/profile">
+                            <span class="fa fa-user"></span>
+                        </a>
+                        <a th:if="${authUser.user.avatarUrl!=null}" href="/view/auth/profile" class="me-2">
+                            <img th:src="${authUser.user.avatarUrl}" style="border-radius: 50%; height: 42px"/>
+                        </a>
                     </li>
                     <li th:if="${appUser!=null}" class="nav-item pb-1">
                         <a class="btn btn-outline-warning me-2" href="/api/admin"><span class="fa fa-user-gear"></span></a>

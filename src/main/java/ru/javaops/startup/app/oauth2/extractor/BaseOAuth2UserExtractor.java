@@ -10,11 +10,13 @@ public class BaseOAuth2UserExtractor {
     private final String emailParam;
     private final String firstNameParam;
     private final String lastNameParam;
+    private final String avatarParam;
 
-    public BaseOAuth2UserExtractor(String emailParam, String firstNameParam, String lastNameParam) {
+    public BaseOAuth2UserExtractor(String emailParam, String firstNameParam, String lastNameParam, String avatarParam) {
         this.emailParam = emailParam;
         this.firstNameParam = firstNameParam;
         this.lastNameParam = lastNameParam;
+        this.avatarParam = avatarParam;
     }
 
     public String getEmail() {
@@ -23,6 +25,10 @@ public class BaseOAuth2UserExtractor {
 
     public String getFirstName() {
         return get(firstNameParam);
+    }
+
+    public String getAvatarUrl() {
+        return get(avatarParam);
     }
 
     public String getLastName() {

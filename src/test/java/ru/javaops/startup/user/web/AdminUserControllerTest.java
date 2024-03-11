@@ -144,7 +144,7 @@ class AdminUserControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = "admin")
     void createInvalid() throws Exception {
-        User invalid = new User(null, "", null, null, Role.USER, Role.ADMIN);
+        User invalid = new User(null, "", null, null, null, Role.USER, Role.ADMIN);
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(writeValue(invalid)))
@@ -192,7 +192,7 @@ class AdminUserControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = "admin")
     void createDuplicate() throws Exception {
-        User expected = new User(null, USER_MAIL, "New", "NewLastName", Role.USER, Role.ADMIN);
+        User expected = new User(null, USER_MAIL, "New", "NewLastName", null, Role.USER, Role.ADMIN);
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(writeValue(expected)))

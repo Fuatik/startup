@@ -44,6 +44,11 @@ public class User extends TimestampEntity implements HasIdAndEmail, Serializable
     @NoHtml
     private String lastName;
 
+    @Column(name = "avatar_url", nullable = true)
+    @Size(max = 256)
+    @NoHtml
+    private String avatarUrl;
+
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -53,19 +58,20 @@ public class User extends TimestampEntity implements HasIdAndEmail, Serializable
     private Set<Role> roles = EnumSet.noneOf(Role.class);
 
     public User(User u) {
-        this(u.id, u.email, u.firstName, u.lastName, u.startpoint, u.endpoint, u.roles);
+        this(u.id, u.email, u.firstName, u.lastName, u.avatarUrl, u.startpoint, u.endpoint, u.roles);
     }
 
     @Default
-    public User(Integer id, String email, String firstName, String lastName, Role... roles) {
-        this(id, email, firstName, lastName, new Date(), null, Arrays.asList(roles));
+    public User(Integer id, String email, String firstName, String lastName, String avatarUrl, Role... roles) {
+        this(id, email, firstName, lastName, avatarUrl, new Date(), null, Arrays.asList(roles));
     }
 
-    public User(Integer id, String email, String firstName, String lastName, Date startpoint, Date endpoint, Collection<Role> roles) {
+    public User(Integer id, String email, String firstName, String lastName, String avatarUrl, Date startpoint, Date endpoint, Collection<Role> roles) {
         super(id, startpoint, endpoint);
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.avatarUrl = avatarUrl;
         setRoles(roles);
     }
 
