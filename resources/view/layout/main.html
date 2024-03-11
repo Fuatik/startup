@@ -30,15 +30,15 @@
                 <li class="nav-item"><a href="https://javaops-demo.ru/topjava" class="ps-0 nav-link link-warning">TopJava Demo</a></li>
             </ul>
             <ul class="nav">
-                <li th:if="${authUser==null && appUser==null}" class="nav-item"><a class="btn btn-outline-warning" href="/view/auth/profile">
+                <li th:if="${authUser==null && appUser==null}" class="nav-item"><a class="btn btn-outline-warning" href="/ui/auth/profile">
                     <span class="fa fa-sign-in"></span></a>
                 </li>
                 <th:block th:if="${authUser!=null || appUser!=null}">
                     <li th:if="${authUser!=null}" class="nav-item pb-1">
-                        <a th:if="${authUser.user.avatarUrl==null}" class="btn btn-outline-warning me-2" href="/view/auth/profile">
+                        <a th:if="${authUser.user.avatarUrl==null}" class="btn btn-outline-warning me-2" href="/ui/auth/profile">
                             <span class="fa fa-user"></span>
                         </a>
-                        <a th:if="${authUser.user.avatarUrl!=null}" href="/view/auth/profile" class="me-2">
+                        <a th:if="${authUser.user.avatarUrl!=null}" href="/ui/auth/profile" class="me-2">
                             <img th:src="${authUser.user.avatarUrl}" style="border-radius: 50%; height: 42px"/>
                         </a>
                     </li>

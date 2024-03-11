@@ -49,12 +49,12 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authz -> authz
                         .requestMatchers(API_PATH + "/admin/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").hasRole(Role.ADMIN.name())
                         .requestMatchers(API_PATH + "/**").hasAnyRole(Role.ADMIN.name(), Role.PARTNER.name())
-                        .requestMatchers("/view/auth/**").authenticated()
+                        .requestMatchers("/ui/auth/**", "/view/auth/**").authenticated()
                         .anyRequest().permitAll())
                 .formLogin(flc -> flc.loginPage("/view/login"))
                 .httpBasic(withDefaults())
                 .logout(lc -> lc.logoutUrl("/view/logout").logoutSuccessUrl("/"))
-                .oauth2Login(olc -> olc.defaultSuccessUrl("/view/auth/profile")
+                .oauth2Login(olc -> olc.defaultSuccessUrl("/ui/auth/profile")
                         .loginPage("/view/login")
                         .userInfoEndpoint(uiec -> uiec.userService(authUserService)))
                 .csrf(AbstractHttpConfigurer::disable);
