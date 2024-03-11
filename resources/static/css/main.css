@@ -122,3 +122,7 @@ a.link-dark:active {color: var(--c4)!important;}
     height: auto;
     max-width: 100%;
 }
+
+input:read-only {
+    background-color: var(--bs-secondary-bg);
+}

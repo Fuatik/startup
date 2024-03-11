@@ -1,12 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <th:block th:replace="~{layout/main::page(title='app.profile',appMain=~{::main})}">
+    <!--/*@thymesVar id="authUser" type="ru.javaops.startup.app.oauth2.AuthUser"*/-->
     <main>
-        <div class="card">
+        <div class="card" th:object="${authUser.user}">
             <div class="card-header px-4">
                 <h4 th:text="#{app.profile}"/>
             </div>
-            <div class="card-body px-4 py-5">
+            <div class="card-body px-4">
+                <div class="mb-3 row">
+                    <div class="col-md-2">
+                        <label for="email" class="col-form-label" th:text="#{app.email}"/>
+                    </div>
+                    <div class="col-md-5 col-10">
+                        <input class="form-control" id="email" th:field="*{email}" readonly>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <div class="col-md-2">
+                        <label for="firstName" class="col-form-label" th:text="#{app.firstName}"/>
+                    </div>
+                    <div class="col-md-5 col-10">
+                        <input type="text" maxlength="32" class="form-control" id="firstName" th:field="*{firstName}">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <div class="col-md-2">
+                        <label for="lastName" class="col-form-label" th:text="#{app.lastName}"/>
+                    </div>
+                    <div class="col-md-5 col-10">
+                        <input type="text" maxlength="32" class="form-control" id="lastName" th:value="*{lastName}">
+                    </div>
+                </div>
             </div>
         </div>
     </main>

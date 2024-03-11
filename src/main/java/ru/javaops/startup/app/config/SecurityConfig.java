@@ -55,6 +55,7 @@ public class SecurityConfig {
                 .httpBasic(withDefaults())
                 .logout(lc -> lc.logoutUrl("/view/logout").logoutSuccessUrl("/"))
                 .oauth2Login(olc -> olc.defaultSuccessUrl("/view/auth/profile")
+                        .loginPage("/view/login")
                         .userInfoEndpoint(uiec -> uiec.userService(authUserService)))
                 .csrf(AbstractHttpConfigurer::disable);
         return http.build();
