@@ -8,7 +8,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javaops.startup.AbstractControllerTest;
 import ru.javaops.startup.common.util.JsonUtil;
-import ru.javaops.startup.user.UsersUtil;
+import ru.javaops.startup.user.mapper.UserMapper;
 import ru.javaops.startup.user.model.User;
 import ru.javaops.startup.user.repository.UserRepository;
 import ru.javaops.startup.user.to.UserTo;
@@ -27,6 +27,9 @@ class PartnerControllerTest extends AbstractControllerTest {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private UserMapper mapper;
+
     @Test
     @WithUserDetails(value = "partner")
     void getTo() throws Exception {
@@ -35,7 +38,7 @@ class PartnerControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(USER_TO_MATCHER.contentJson(UsersUtil.toTo(admin)));
+                .andExpect(USER_TO_MATCHER.contentJson(mapper.toTo(admin)));
     }
 
     @Test
@@ -51,7 +54,7 @@ class PartnerControllerTest extends AbstractControllerTest {
         User created = USER_MATCHER.readFromJson(action);
         int newId = created.id();
         newTo.setId(newId);
-        User newUser = UsersUtil.toEntity(newTo);
+        User newUser = mapper.toEntity(newTo);
         USER_MATCHER.assertMatch(created, newUser);
         USER_MATCHER.assertMatch(repository.getExisted(newId), newUser);
     }
@@ -65,6 +68,6 @@ class PartnerControllerTest extends AbstractControllerTest {
                 .content(writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        USER_MATCHER.assertMatch(repository.getExisted(USER_ID), UsersUtil.toEntity(updatedTo));
+        USER_MATCHER.assertMatch(repository.getExisted(USER_ID), mapper.toEntity(updatedTo));
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaops.startup.app.config.SecurityConfig;
-import ru.javaops.startup.user.UsersUtil;
+import ru.javaops.startup.user.mapper.UserMapper;
 import ru.javaops.startup.user.model.User;
 import ru.javaops.startup.user.to.UserTo;
 
@@ -26,9 +26,11 @@ import static ru.javaops.startup.common.validation.ValidationUtil.checkNew;
 public class PartnerController extends AbstractUserController {
     static final String REST_URL = SecurityConfig.API_PATH + "/partner/users";
 
+    private final UserMapper mapper;
+
     @GetMapping("/{id}")
     public UserTo getTo(@PathVariable int id) {
-        return UsersUtil.toTo(super.get(id));
+        return mapper.toTo(super.get(id));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -36,7 +38,7 @@ public class PartnerController extends AbstractUserController {
     public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
         log.info("register {}", userTo);
         checkNew(userTo);
-        User created = repository.save(UsersUtil.toEntity(userTo));
+        User created = repository.save(mapper.toEntity(userTo));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -49,6 +51,6 @@ public class PartnerController extends AbstractUserController {
     public void update(@Valid @RequestBody UserTo userTo, @PathVariable int id) {
         log.info("update {} with id={}", userTo, id);
         assureIdConsistent(userTo, id);
-        repository.save(UsersUtil.updateFromTo(userTo, repository.getExisted(id)));
+        repository.save(mapper.updateFromTo(userTo, repository.getExisted(id)));
     }
 }

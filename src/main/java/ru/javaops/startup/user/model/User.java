@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.javaops.startup.common.HasIdAndEmail;
+import ru.javaops.startup.common.mapper.Default;
 import ru.javaops.startup.common.model.NamedEntity;
 import ru.javaops.startup.common.validation.NoHtml;
 
@@ -56,6 +57,7 @@ public class User extends NamedEntity implements HasIdAndEmail {
         this(u.id, u.name, u.email, u.lastName, u.enabled, u.registered, u.roles);
     }
 
+    @Default
     public User(Integer id, String name, String email, String lastName, Role... roles) {
         this(id, name, email, lastName, true, new Date(), Arrays.asList(roles));
     }
