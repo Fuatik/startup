@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
-<th:block th:replace="~{layout/main::page(title='app.profile',appMain=~{::main})}">
+<th:block th:replace="~{layout/main::page(title='app.profile',appMain=~{::main}, windowMode=${appUser!=null})}">
     <!--/*@thymesVar id="profileTo" type="ru.javaops.startup.user.to.ProfileTo"*/-->
     <!--/*@thymesVar id="contacts" type="java.util.List<ru.javaops.startup.ref.to.RefTo>"*/-->
+    <!--/*@thymesVar id="authUser" type="ru.javaops.startup.app.oauth2.AuthUser"*/-->
+    <!--/*@thymesVar id="appUser" type="ru.javaops.startup.app.AppUser"*/-->
     <main>
-        <div class="card" th:object="${profileTo}">
+        <div class="card" th:object="${profileTo}" th:with="path = (${appUser!=null ?'admin':'auth'})">
             <!--   https://www.thymeleaf.org/doc/tutorials/3.1/thymeleafspring.html#validation-and-error-messages  -->
-            <form action="/ui/auth/profile" method="post">
+            <form th:action="|/ui/${path}/profile|" method="post">
                 <div class="card-header px-4">
                     <h4 th:text="#{app.profile}"/>
                 </div>
@@ -61,8 +63,9 @@
                 </div>
             </form>
             <!--            https://stackoverflow.com/a/20789795/548473 -->
-            <form action="/ui/auth/profile/delete" method="post" class="ms-4 mb-3"
+            <form th:action="|/ui/${path}/profile/delete|" method="post" class="ms-4 mb-3"
                   th:onsubmit="return confirm([[#{app.deleteAccountConfirm(*{email})}]])">
+                <input name="email" hidden th:value="${profileTo.email}">
                 <button class="btn btn-danger rounded ms-2" type="submit"><span th:text="#{app.deleteAccount}"/></button>
             </form>
         </div>

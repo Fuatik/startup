@@ -18,25 +18,25 @@ public class ProfileService {
     private final ProfileMapper mapper;
 
     @Transactional
-    public ProfileTo getOrCreate(int userId) {
-        User user = userRepository.getExisted(userId);
-        UserData userData = userDataRepository.getOrCreate(userId);
+    public ProfileTo getOrCreate(String email) {
+        User user = userRepository.getExistedByEmail(email);
+        UserData userData = userDataRepository.getOrCreate(user.getId());
         return mapper.toTo(user, userData);
     }
 
     @Transactional
-    public User update(ProfileTo profileTo, int userId) {
-        User user = userRepository.getExisted(userId);
+    public User update(ProfileTo profileTo, String email) {
+        User user = userRepository.getExistedByEmail(email);
         mapper.updateUserFromTo(profileTo, user);
-        UserData userData = userDataRepository.getOrCreate(userId);
+        UserData userData = userDataRepository.getOrCreate(user.getId());
         mapper.updateUserDataFromTo(profileTo, userData);
         userDataRepository.save(userData);
         return user;
     }
 
     @Transactional
-    public void delete(int userId) {
-        User user = userRepository.getExisted(userId);
+    public void delete(String email) {
+        User user = userRepository.getExistedByEmail(email);
         userDataRepository.delete(user.id());
         userRepository.delete(user);
     }

@@ -7,29 +7,28 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.javaops.startup.user.to.ProfileTo;
 
-import static ru.javaops.startup.app.AuthUtil.authUser;
-
 @Controller
-@RequestMapping(ProfileUIController.UI_PROFILE)
-public class ProfileUIController extends AbstractProfileController {
-    static final String UI_PROFILE = "/ui/auth/profile";
+@RequestMapping(AdminProfileUIController.UI_PROFILE)
+public class AdminProfileUIController extends AbstractProfileController {
+    static final String UI_PROFILE = "/ui/admin/profile";
 
     @GetMapping
-    public String get(ModelMap model) {
-        return getByEmail(authUser().getEmail(), model);
+    public String get(@RequestParam String email, ModelMap model) {
+        return getByEmail(email, model);
     }
 
     @PostMapping("/delete")
-    public String delete() {
-        deleteByEmail(authUser().getEmail());
-        return "redirect:/view/logout";
+    public String delete(@RequestParam String email) {
+        deleteByEmail(email);
+        return "redirect:/view/util/closeWindow";
     }
 
     @PostMapping
     public String update(@Valid ProfileTo profile, BindingResult result, RedirectAttributes redirectAttrs, ModelMap model) {
-        return super.update(profile, result, redirectAttrs, model, authUser().getEmail(), UI_PROFILE);
+        return super.update(profile, result, redirectAttrs, model, profile.getEmail(), UI_PROFILE + "?email=" + profile.getEmail());
     }
 }

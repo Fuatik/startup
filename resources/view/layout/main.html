@@ -20,7 +20,7 @@
     </head>
     <body class="d-flex flex-column">
     <!--    https://getbootstrap.com/docs/5.3/examples/headers/    -->
-    <nav class="pt-1 border-bottom">
+    <nav th:unless="${windowMode}" class="pt-1 border-bottom">
         <div class="container d-flex flex-wrap">
             <ul class="nav me-auto">
                 <li class="nav-item me-2 pt-1">
@@ -72,7 +72,7 @@
         </div>
     </main>
 
-    <footer class="footer mt-auto py-2">
+    <footer th:unless="${windowMode}" class="footer mt-auto py-2">
         <div class="container">
             <div th:utext="#{app.footer}"></div>
             <div class="row">
