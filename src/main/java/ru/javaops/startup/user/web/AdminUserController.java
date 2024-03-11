@@ -59,8 +59,6 @@ public class AdminUserController extends AbstractUserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
     public void enable(@PathVariable int id, @RequestParam boolean enabled) {
-        log.info(enabled ? "enable {}" : "disable {}", id);
-        User user = service.getRepository().getExisted(id);
-        user.setEnabled(enabled);
+        service.enable(id, enabled);
     }
 }

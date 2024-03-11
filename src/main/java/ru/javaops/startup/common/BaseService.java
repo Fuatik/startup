@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javaops.startup.common.mapper.BaseMapper;
+import ru.javaops.startup.common.model.TimestampEntity;
 import ru.javaops.startup.common.to.BaseTo;
 import ru.javaops.startup.common.validation.ValidationUtil;
 
@@ -122,5 +123,16 @@ public class BaseService<E extends HasId, T extends BaseTo, R extends BaseReposi
 
     public List<T> toToList(List<E> entities) {
         return mapper.toToList(entities);
+    }
+
+    @Transactional
+    public void enable(int id, boolean enabled) {
+        log.info(enabled ? "enable {}" : "disable {}", id);
+        E entity = repository.getExisted(id);
+        if (entity instanceof TimestampEntity te) {
+            te.setEnabled(enabled);
+        } else {
+            throw new UnsupportedOperationException("enabling for " + entity + " is not supported");
+        }
     }
 }

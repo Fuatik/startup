@@ -1,10 +1,8 @@
 package ru.javaops.startup.user.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.javaops.startup.common.HasIdAndEmail;
 import ru.javaops.startup.common.mapper.Default;
-import ru.javaops.startup.common.model.NamedEntity;
+import ru.javaops.startup.common.model.TimestampEntity;
 import ru.javaops.startup.common.validation.NoHtml;
 
 import java.util.*;
@@ -22,7 +20,7 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends NamedEntity implements HasIdAndEmail {
+public class User extends TimestampEntity implements HasIdAndEmail {
 // No session, no needs Serializable
 
     @Column(name = "email", nullable = false, unique = true)
@@ -32,18 +30,16 @@ public class User extends NamedEntity implements HasIdAndEmail {
     @NoHtml   // https://stackoverflow.com/questions/17480809
     private String email;
 
+    @Column(name = "first_name", nullable = true)
+    @NotBlank
+    @Size(max = 32)
+    @NoHtml
+    private String firstName;
+
     @Column(name = "last_name", nullable = true)
     @Size(max = 32)
     @NoHtml
     private String lastName;
-
-    @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
-    private boolean enabled = true;
-
-    @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
-    @NotNull
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Date registered = new Date();
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_role",
@@ -54,20 +50,19 @@ public class User extends NamedEntity implements HasIdAndEmail {
     private Set<Role> roles = EnumSet.noneOf(Role.class);
 
     public User(User u) {
-        this(u.id, u.name, u.email, u.lastName, u.enabled, u.registered, u.roles);
+        this(u.id, u.email, u.firstName, u.lastName, u.startpoint, u.endpoint, u.roles);
     }
 
     @Default
-    public User(Integer id, String name, String email, String lastName, Role... roles) {
-        this(id, name, email, lastName, true, new Date(), Arrays.asList(roles));
+    public User(Integer id, String email, String firstName, String lastName, Role... roles) {
+        this(id, email, firstName, lastName, new Date(), null, Arrays.asList(roles));
     }
 
-    public User(Integer id, String name, String email, String lastName, boolean enabled, Date registered, Collection<Role> roles) {
-        super(id, name);
+    public User(Integer id, String email, String firstName, String lastName, Date startpoint, Date endpoint, Collection<Role> roles) {
+        super(id, startpoint, endpoint);
         this.email = email;
+        this.firstName = firstName;
         this.lastName = lastName;
-        this.enabled = enabled;
-        this.registered = registered;
         setRoles(roles);
     }
 

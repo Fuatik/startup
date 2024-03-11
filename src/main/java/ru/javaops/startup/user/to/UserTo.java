@@ -3,15 +3,18 @@ package ru.javaops.startup.user.to;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Value;
+import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 import ru.javaops.startup.common.HasIdAndEmail;
-import ru.javaops.startup.common.to.NamedTo;
+import ru.javaops.startup.common.to.TimestampTo;
 import ru.javaops.startup.common.validation.NoHtml;
 
-@Value
+@Data
 @EqualsAndHashCode(callSuper = true)
-public class UserTo extends NamedTo implements HasIdAndEmail {
+@NoArgsConstructor
+public class UserTo extends TimestampTo implements HasIdAndEmail {
     @Email
     @NotBlank
     @Size(max = 64)
@@ -21,11 +24,17 @@ public class UserTo extends NamedTo implements HasIdAndEmail {
     @NotBlank
     @Size(max = 32)
     @NoHtml
+    String firstName;
+
+    @Size(max = 32)
+    @Nullable
+    @NoHtml
     String lastName;
 
-    public UserTo(Integer id, String name, String email, String lastName) {
-        super(id, name);
+    public UserTo(Integer id, String email, String firstName, String lastName) {
+        super(id);
         this.email = email;
+        this.firstName = firstName;
         this.lastName = lastName;
     }
 
