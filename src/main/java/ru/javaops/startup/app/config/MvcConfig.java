@@ -90,7 +90,7 @@ public class MvcConfig implements WebMvcConfigurer {
                 if (model != null) {
                     DefaultSavedRequest savedRequest = (DefaultSavedRequest) request.getAttribute("SPRING_SECURITY_SAVED_REQUEST", SCOPE_SESSION);
                     if (savedRequest != null) {
-                        model.addAttribute("adminLogin", savedRequest.getRequestURI().startsWith("/api/admin"));
+                        model.addAttribute("adminLogin", savedRequest.getRequestURI().startsWith("/view/admin/queries"));
                     }
                     model.addAttribute("authUser", AuthUtil.safeGet());
                     model.addAttribute("appUser", AuthUtil.safeGetAppUser());

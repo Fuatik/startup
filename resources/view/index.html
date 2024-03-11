@@ -7,7 +7,7 @@
         <div class="text-center">
             <h1 th:utext="#{app.welcome}"></h1>
             <img src="/static/img/title/startup.png" class="p-1 my-4 border rounded fit">
-            <h4 th:if="${authUser==null && appUser==null}"><a href="/api/admin" th:text="#{app.adminAPI}"></a></h4>
+            <h4 th:if="${authUser==null && appUser==null}"><a href="/view/admin/queries" th:text="#{app.adminAPI}"></a></h4>
         </div>
     </main>
 </th:block>

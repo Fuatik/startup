@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -47,9 +48,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authz -> authz
-                        .requestMatchers(API_PATH + "/admin/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").hasRole(Role.ADMIN.name())
                         .requestMatchers(API_PATH + "/**").hasAnyRole(Role.ADMIN.name(), Role.PARTNER.name())
                         .requestMatchers("/ui/auth/**", "/view/auth/**").authenticated()
+                        .requestMatchers("/api/admin/**", "/ui/admin/**", "/view/admin/**").hasRole(Role.ADMIN.name())
                         .anyRequest().permitAll())
                 .formLogin(flc -> flc.loginPage("/view/login"))
                 .httpBasic(withDefaults())
@@ -57,7 +59,8 @@ public class SecurityConfig {
                 .oauth2Login(olc -> olc.defaultSuccessUrl("/ui/auth/profile")
                         .loginPage("/view/login")
                         .userInfoEndpoint(uiec -> uiec.userService(authUserService)))
-                .csrf(AbstractHttpConfigurer::disable);
+                .csrf(AbstractHttpConfigurer::disable)
+                .headers(hc -> hc.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
         return http.build();
     }
 }

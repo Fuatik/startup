@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>[[${query}]] result</title>
+    <link rel="shortcut icon" href="/static/img/logo.png"/>
+    <link rel="apple-touch-icon" href="/static/img/logo.png">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/datatables/jquery.dataTables.min.css"/>
+    <link rel="stylesheet" href="/static/datatables/dataTables.bootstrap5.min.css"/>
+    <link rel="stylesheet" href="/static/datatables/fixedHeader.bootstrap5.min.css"/>
+</head>
+<body>
+<div style="margin-left: 8px;width: 99%">
+    <table id="table" class="table table-striped">
+        <!--/*@thymesVar id="result" type="ru.javaops.SqlResult"*/-->
+        <thead>
+        <tr>
+            <th></th>
+            <th th:each="header: ${result.headers}">
+                <span th:text="${#strings.capitalize(header)}"></span>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="row,iter: ${result.rows}">
+            <td th:text="${iter.count}"></td>
+            <th:block th:each="item: ${row}">
+                <td th:utext="${item}" th:nowrap="${param.wrap==null}"></td>
+            </th:block>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+<script src="/static/jquery/jquery-3.7.0.min.js"></script>
+<script src="/static/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/datatables/dataTables.bootstrap5.min.js"></script>
+<script src="/static/datatables/fixedHeader.bootstrap5.min.js"></script>
+<script>
+    $(function () {
+        new DataTable('#table', {
+            paging: false,
+            searching: false,
+            order: [],
+            fixedHeader: true,
+            language: {
+                "url": "/static/datatables/i18n/[[${#locale.language}]].json"
+            },
+        });
+    });
+</script>
+</html>
