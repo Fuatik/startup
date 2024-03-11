@@ -12,6 +12,8 @@ app:
 
 #  https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 30s # время, в течение которого текущие запросы будут отрабатываться после получения сигнала SIGTERM
   jpa:
     show-sql: true
     open-in-view: false
@@ -24,6 +26,20 @@ spring:
         default_batch_fetch_size: 20
         # https://stackoverflow.com/questions/21257819/what-is-the-difference-between-hibernate-jdbc-fetch-size-and-hibernate-jdbc-batc
         jdbc.batch_size: 20
+    hikari:
+      # таймаут на получение соединения из пула соединений
+      connection-timeout: 2000 # в миллисекундах
+      # по умолчанию в приложении используется пул соединений с БД HikariCP.
+      # его размер конфигурируется этой настройкой. Специалисты команды HikariCP рекомендуют
+      # устанавливать количество соединений, исходя из формулы:
+      # connections = ((core_count * 2) + effective_spindle_count)
+      # где core_count - количество ядер процессора
+      # effective_spindle_count - количество вращающихся дисков
+      # Так как мы предполагаем, что будет использоваться SSD, вращающихся дисков не будет,
+      # поэтому effective_spindle_count = 0
+      # Мы также предполагаем, что количество ядер = 4, следовательно maximum-pool-size = 8
+      # более подробно тут: https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
+      maximum-pool-size: 8
 
   liquibase:
     changeLog: "classpath:db_migration/changelog.sql"
@@ -113,10 +129,31 @@ logging:
     org.apache.catalina: OFF
     org.thymeleaf.TemplateEngine: OFF
 
-server.servlet:
-  encoding:
-    charset: UTF-8 # Charset of HTTP requests and responses. Added to the "Content-Type" header if not set explicitly
-    enabled: true # Enable http encoding support
-    force: true
+server:
+  # говорим серверу, чтобы при получении сигнала SIGTERM он более не принимал
+  # новые запросы, но при этом выполнил те, что уже в работе в течение времени,
+  # которое указано в настройке spring.lifecycle.timeout-per-shutdown-phase
+  # по умолчанию 30 секунд
+  # https://habr.com/en/companies/maxilect/articles/666090/
+  shutdown: graceful
+  tomcat:
+    # Говорим Tomcat сколько времени ждать после открытия соединения до получения запроса.
+    # Может быть полезно для защиты от DoS атак, когда клиент устанавливает соединение,
+    # сервер выделяет поток для его обработки, но запрос не приходит.
+    # Это же время Tomcat будет тратить на чтение тела запроса.
+    connection-timeout: 3s
+    # время, в течение которого Tomcat удерживает соединение открытым, ожидая новых запросов
+    keep-alive-timeout: 20s
+    # Tomcat использует пул потоков для обработки входящих соединений: одно соединение - один поток.
+    # По умолчанию макимальное количество потоков в пуле - 200.
+    threads:
+      max: 200
+      # минимальное количество потоков, которые будут созданы в пуле при старте сервера
+      min-spare: 10
+  servlet:
+    encoding:
+      charset: UTF-8 # Charset of HTTP requests and responses. Added to the "Content-Type" header if not set explicitly
+      enabled: true # Enable http encoding support
+      force: true
 
 springdoc.swagger-ui.path: /api/admin

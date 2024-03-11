@@ -1,5 +1,5 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:startup
+    url: jdbc:h2:./db/startup_dev;AUTO_SERVER=TRUE
     username: sa
     password:
