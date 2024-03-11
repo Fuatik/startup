@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <th:block th:replace="~{layout/main::page(title='app.profile',appMain=~{::main})}">
-    <!--/*@thymesVar id="userTo" type="ru.javaops.startup.user.to.UserTo" */-->
+    <!--/*@thymesVar id="profileTo" type="ru.javaops.startup.user.to.ProfileTo"*/-->
+    <!--/*@thymesVar id="contacts" type="java.util.List<ru.javaops.startup.ref.to.RefTo>"*/-->
     <main>
-        <div class="card" th:object="${userTo}">
+        <div class="card" th:object="${profileTo}">
             <!--   https://www.thymeleaf.org/doc/tutorials/3.1/thymeleafspring.html#validation-and-error-messages  -->
             <form action="/ui/auth/profile" method="post">
                 <div class="card-header px-4">
@@ -38,6 +39,24 @@
                             <div class="invalid-feedback" th:errors="*{lastName}"></div>
                         </div>
                     </div>
+                </div>
+                <div class="card-header px-4 border-top">
+                    <h4 th:text="#{app.contacts}"/>
+                </div>
+                <div class="card-body px-4">
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr th:each="contact: ${contacts}" class="row">
+                            <td class="col-md-2"><span th:text="#{${contact.code}}"/></td>
+                            <td class="col-md-5 col-10">
+                                <!-- https://stackoverflow.com/a/4511716/548473 -->
+                                <input type="text" maxlength="32" class="form-control" th:field="*{contacts[__${contact.code}__]}"
+                                       th:errorclass="is-invalid" th:classappend="${saved}? 'is-valid':''" th:readonly="${!contact.enabled}">
+                                <div class="invalid-feedback" th:errors="*{contacts[__${contact.code}__]}"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                     <button class="btn btn-lg btn-outline-warning rounded" type="submit" th:text="#{app.save}"/>
                 </div>
             </form>
