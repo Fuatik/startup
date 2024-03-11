@@ -41,6 +41,67 @@ spring:
     cache-names: ref, refs
     caffeine.spec: maximumSize=10000,expireAfterAccess=300s
 
+  # oauth2
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            # https://github.com/settings/developers
+            # https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/
+            # Prod Callback: https://javaops-demo.ru/login/oauth2/code/github
+            # Dev Callback: http://localhost:8080/login/oauth2/code/github
+            client-id: 6406bd844e24615dedb1
+            client-secret: bbf3a355f7ca82253c2f13a09a422de83a98c951
+            redirect-uri: "${app.host-url}/login/oauth2/code/{registrationId}"
+            scope:
+              - email
+          google:
+            # https://console.cloud.google.com/apis/credentials (Create credentials->OAuth client ID)
+            # Callback1: https://javaops-demo.ru/login/oauth2/code/google
+            # Callback2: http://localhost:8080/login/oauth2/code/google
+            # App verification: https://support.google.com/cloud/answer/13463073?authuser=1&visit_id=638408359305344116-1431348099&rd=1
+            client-id: 941288919561-7oc12vnfs0voahn83i9kfvrjm5ekfeno.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: "${app.host-url}/login/oauth2/code/{registrationId}"
+            scope:
+              - email
+              - profile
+
+          #vk:
+            # https://id.vk.com/about/business/go/create-account
+          yandex:
+            # https://oauth.yandex.ru/
+            # https://yandex.ru/dev/id/doc/ru/register-client
+            # Callback1: https://javaops-demo.ru/login/oauth2/code/yandex
+            # Callback2: http://localhost:8080/login/oauth2/code/yandex
+            client-id: e503aec83503471fa7d47068014a9c5e
+            client-secret: 23d6f42b892e4d21a49bc238c5f1239b
+            client-name: Yandex
+            redirect-uri: "${app.host-url}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: authorization_code
+          gitlab:
+            # https://gitlab.com/-/user_settings/applications
+            # Callback1: https://javaops-demo.ru/login/oauth2/code/gitlab
+            # Callback2: http://localhost:8080/login/oauth2/code/gitlab
+            client-id: b4af1ba03e068a1b293a5a35bce0e49149b4edb9d05f0dee3187c79ab351cb71
+            client-secret: gloas-32e46a4ff5db6c847b27ce0ff151371241466885e8faba783b7c802195b37d0c
+            client-name: GitLab
+            redirect-uri: "${app.host-url}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: authorization_code
+            scope: read_user
+        provider:
+          yandex:
+            authorization-uri: https://oauth.yandex.ru/authorize
+            token-uri: https://oauth.yandex.ru/token
+            user-info-uri: https://login.yandex.ru/info
+            user-name-attribute: login
+          gitlab:
+            authorization-uri: https://gitlab.com/oauth/authorize
+            token-uri: https://gitlab.com/oauth/token
+            user-info-uri: https://gitlab.com/api/v4/user
+            user-name-attribute: email
+
 logging:
   level:
     root: WARN

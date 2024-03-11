@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<th:block th:replace="~{layout/main::page(title='app.profile',appMain=~{::main})}">
+    <main>
+        <div class="card">
+            <div class="card-header px-4">
+                <h4 th:text="#{app.profile}"/>
+            </div>
+            <div class="card-body px-4 py-5">
+            </div>
+        </div>
+    </main>
+</th:block>
+</html>

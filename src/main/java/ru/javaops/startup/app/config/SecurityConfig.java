@@ -13,6 +13,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import ru.javaops.startup.app.AppUser;
+import ru.javaops.startup.app.oauth2.AuthUserService;
 import ru.javaops.startup.user.model.Role;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class SecurityConfig {
     public static final String API_PATH = "/api";
 
     private final AppProps appProps;
+    private final AuthUserService authUserService;
 
     // https://stackoverflow.com/questions/62622390/548473
     @Bean
@@ -47,10 +49,13 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authz -> authz
                         .requestMatchers(API_PATH + "/admin/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").hasRole(Role.ADMIN.name())
                         .requestMatchers(API_PATH + "/**").hasAnyRole(Role.ADMIN.name(), Role.PARTNER.name())
+                        .requestMatchers("/view/auth/**").authenticated()
                         .anyRequest().permitAll())
                 .formLogin(flc -> flc.loginPage("/view/login"))
                 .httpBasic(withDefaults())
                 .logout(lc -> lc.logoutUrl("/view/logout").logoutSuccessUrl("/"))
+                .oauth2Login(olc -> olc.defaultSuccessUrl("/view/auth/profile")
+                        .userInfoEndpoint(uiec -> uiec.userService(authUserService)))
                 .csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }

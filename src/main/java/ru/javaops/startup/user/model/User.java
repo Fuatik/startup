@@ -13,6 +13,8 @@ import ru.javaops.startup.common.mapper.Default;
 import ru.javaops.startup.common.model.TimestampEntity;
 import ru.javaops.startup.common.validation.NoHtml;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
@@ -20,8 +22,9 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends TimestampEntity implements HasIdAndEmail {
-// No session, no needs Serializable
+public class User extends TimestampEntity implements HasIdAndEmail, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Column(name = "email", nullable = false, unique = true)
     @Email
