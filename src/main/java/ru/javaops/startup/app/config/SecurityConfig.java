@@ -46,6 +46,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authz -> authz
                         .requestMatchers(API_PATH + "/admin/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers(API_PATH + "/**").hasAnyRole(Role.ADMIN.name(), Role.PARTNER.name())
                         .anyRequest().permitAll())
                 .formLogin(flc -> flc.loginPage("/view/login"))
                 .httpBasic(withDefaults())
