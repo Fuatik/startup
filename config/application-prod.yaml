@@ -16,6 +16,8 @@ spring:
     username: xxx
     password: xyz
   jpa:
+    hibernate:
+      ddl-auto: none
     show-sql: false
     properties:
       hibernate:

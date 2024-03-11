@@ -25,7 +25,7 @@ public class UserData {
     @NotNull
     private int userId;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "userData")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "userId")
     private Set<Contact> contacts = new HashSet<>();
 
     public UserData(int userId) {

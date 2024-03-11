@@ -34,7 +34,7 @@ public interface ProfileMapper {
         contacts.clear();
         contacts.addAll(to.getContacts().entrySet().stream()
                 .filter(e -> StringUtils.hasText(e.getValue()))
-                .map(e -> new Contact(userData, userData.getUserId(), e.getKey(), e.getValue()))
+                .map(e -> new Contact(userData.getUserId(), e.getKey(), e.getValue()))
                 .collect(Collectors.toSet()));
     }
 }
