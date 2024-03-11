@@ -1,12 +1,15 @@
 app:
   host-url: https://javaops-demo.ru
+  #  https://stackoverflow.com/questions/62622390/548473
+  users:
+    - name: adminX
+      password: "{noop}adminX"
+      roles: ADMIN
+    - name: partnerY
+      password: "{noop}partnerY"
+      roles: PARTNER
 
 spring:
-  security:
-    user:
-      name: xxx
-      password: xyz
-
   # http://www.h2database.com/html/features.html#auto_mixed_mode
   datasource:
     url: jdbc:h2:./db/startup;AUTO_SERVER=TRUE
