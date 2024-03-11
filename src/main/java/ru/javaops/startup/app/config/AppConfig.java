@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.h2.tools.Server;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,10 +34,12 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 @RequiredArgsConstructor
 public class AppConfig {
     public static volatile Properties queriesAdmin;
+    private final CacheManager cacheManager;
 
     @PostConstruct
     public void init() {
         log.info("init");
+        clearAllCaches();
         refreshAppProps();
     }
 
@@ -44,6 +47,10 @@ public class AppConfig {
     @Scheduled(fixedRateString = "#{T(org.springframework.boot.convert.DurationStyle).detectAndParse('${app.update-cache}')}")
     public void refreshAppProps() {
         queriesAdmin = Util.loadProps("./config/queries/admin.properties");
+    }
+
+    public void clearAllCaches() {
+        cacheManager.getCacheNames().forEach(name -> cacheManager.getCache(name).clear());
     }
 
     @Profile("!test")

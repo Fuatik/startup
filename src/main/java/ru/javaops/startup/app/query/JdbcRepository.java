@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSetMetaData;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,10 @@ public class JdbcRepository {
     public int update(String sql, Map<String, ?> params) {
         log.info("Execute update '{}' with params {}", sql, params);
         return jdbcTemplate.update(sql, params);
+    }
+
+    public synchronized void backup() {
+        execute(String.format("BACKUP TO '%s'", "./db/backup/" + DateTimeFormatter.ISO_DATE.format(LocalDate.now()) + ".zip"));
     }
 
     public Boolean execute(String sql) {
