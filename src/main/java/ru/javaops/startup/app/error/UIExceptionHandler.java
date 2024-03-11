@@ -38,19 +38,19 @@ public class UIExceptionHandler extends BasicExceptionHandler {
     ModelAndView processError(@Nullable Throwable th, String path, @Nullable Integer intStatus, String msg) {
         return super.processError(th, path, msg, UIExceptionHandler::getExceptionView, () -> {
             HttpStatus status = getStatus(intStatus);
-            return getView(th, status, ErrorType.of(status).title, msg);
+            return getView(th, status, ErrorType.of(status).code, msg);
         });
     }
 
     private static ModelAndView getExceptionView(@Nullable Throwable ex, String path, ErrorType type, String msg) {
-        return getView(ex, type.status, type.title, msg);
+        return getView(ex, type.status, type.code, msg);
     }
 
-    private static ModelAndView getView(@Nullable Throwable ex, HttpStatus status, String title, String msg) {
+    private static ModelAndView getView(@Nullable Throwable ex, HttpStatus status, String code, String msg) {
         ModelAndView modelAndView = ex instanceof NoResourceFoundException ?
                 new ModelAndView("404") :
                 new ModelAndView("exception",
-                        Map.of("title", title, "status", status, "msg", msg));
+                        Map.of("titleCode", code, "status", status, "msg", msg));
         modelAndView.setStatus(status);
         return modelAndView;
     }

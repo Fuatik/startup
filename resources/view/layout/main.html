@@ -4,17 +4,17 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="title" th:content="${title}"/>
-        <meta name="description" th:content="${descr}"/>
-        <title>[[${title}]]</title>
+        <meta name="title" th:content="#{${title}}"/>
+        <meta name="description" th:content="#{${descr}}"/>
+        <title>[[#{${title}}]]</title>
         <link rel="shortcut icon" href="/static/img/logo.png"/>
         <link rel="apple-touch-icon" href="/static/img/logo.png">
-        <link rel="image_src" href="/static/img/title/startup.png"/>
+        <link rel="image_src" th:href="${img}"/>
         <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
         <!--        https://fontawesome.com/download        -->
         <link rel="stylesheet" href="/static/fontawesome/css/all.min.css"/>
-        <link rel="stylesheet" href="/static/css/main.css?v=2"/>
-        <meta name="keywords" content="Курс Startup: готовый веб-проект для разработки и ведения бизнеса">
+        <link rel="stylesheet" href="/static/css/main.css?v=3"/>
+        <meta name="keywords" th:content="#{${descr}}">
     </head>
     <body class="d-flex flex-column">
     <!--    https://getbootstrap.com/docs/5.3/examples/headers/    -->
@@ -27,6 +27,24 @@
                 <li class="nav-item"><a href="https://javaops-demo.ru/basejava" class="nav-link link-warning">BaseJava Demo</a></li>
                 <li class="nav-item"><a href="https://javaops-demo.ru/topjava" class="ps-0 nav-link link-warning">TopJava Demo</a></li>
             </ul>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="btn btn-outline-warning" href="/view/logout"><span class="fa fa-sign-out"></span></a>
+                </li>
+                <li class="nav-item">
+                    <div class="dropdown">
+                        <!--   https://stackoverflow.com/a/65526072/548473
+                               https://www.thymeleaf.org/apidocs/thymeleaf/3.0.0.RELEASE/index.html?org/thymeleaf/expression/Strings.html
+                        -->
+                        <a class="dropdown-toggle nav-link link-dark pt-1 ps-3 pe-0" data-bs-toggle="dropdown"
+                           th:text="${#strings.capitalize(#locale.language)}"></a>
+                        <ul class="dropdown-menu text-small" style="min-width: 60px">
+                            <li><a class="dropdown-item" th:href="@{?lang=en}">En</a></li>
+                            <li><a class="dropdown-item" th:href="@{?lang=ru}">Ru</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
         </div>
     </nav>
 
@@ -38,11 +56,10 @@
 
     <footer class="footer mt-auto py-2">
         <div class="container">
-            <div>Приложение по курсу Startup: <a href="https://javaops.ru/view/startup" target="_blank" class="c4">готовый веб-проект для разработки и ведения
-                бизнеса: Ubuntu, Nginx, HTTPS</a></div>
+            <div th:utext="#{app.footer}"></div>
             <div class="row">
                 <div class="col-6 my-2">
-                    <span>Контакты</span>:
+                    <span th:text="#{app.contacts}"/>:
                     <a href="https://t.me/gkislin" class="m-1">
                         <i class="fa-brands fa-telegram fa-lg"></i>
                     </a>
@@ -76,7 +93,7 @@
                     <style>
                         /* https://lospirata.ru/blog/webdev/blok-podelitsya-ot-yandeks-nestandartnaya-nastrojka/ */
                         .ya-share2__list::before {
-                            content: 'Поделиться \203A ';
+                            content: '[[#{app.share}]] \203A ';
                             position: relative;
                             top: 5px;
                             font-size: 16px;
@@ -92,5 +109,6 @@
         </div>
     </footer>
     </body>
+    <script src="/static/bootstrap/js/bootstrap.bundle.min.js" defer></script>
 </th:block>
 </html>

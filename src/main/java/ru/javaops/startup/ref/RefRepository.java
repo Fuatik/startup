@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javaops.startup.common.BaseRepository;
-import ru.javaops.startup.common.error.NotFoundException;
+import ru.javaops.startup.common.error.I18nException;
 import ru.javaops.startup.ref.model.RefEntity;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public interface RefRepository extends BaseRepository<RefEntity> {
     List<RefEntity> getByType(String type);
 
     default RefEntity getExisted(String code) {
-        return get(code).orElseThrow(() -> new NotFoundException("Refs with code=" + code + " not found"));
+        return get(code).orElseThrow(() -> new I18nException(I18nException.REF_NOT_FOUND, code));
     }
 
     @Caching(evict = {

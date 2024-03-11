@@ -21,7 +21,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @NoHtml
 @Size(min = 1, max = 32)
 public @interface Code {
-    String message() default "{error.wrongCode}";
+    String message() default "{err.msg.wrongCode}";
 
     Class<?>[] groups() default {};
 

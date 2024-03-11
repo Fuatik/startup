@@ -3,7 +3,7 @@ package ru.javaops.startup.user.repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javaops.startup.common.BaseRepository;
-import ru.javaops.startup.common.error.NotFoundException;
+import ru.javaops.startup.common.error.I18nException;
 import ru.javaops.startup.user.model.User;
 
 import java.util.Optional;
@@ -14,6 +14,6 @@ public interface UserRepository extends BaseRepository<User> {
     Optional<User> findByEmailIgnoreCase(String email);
 
     default User getExistedByEmail(String email) {
-        return findByEmailIgnoreCase(email).orElseThrow(() -> new NotFoundException("User with email=" + email + " not found"));
+        return findByEmailIgnoreCase(email).orElseThrow(() -> new I18nException(I18nException.USER_NOT_FOUND, email));
     }
 }

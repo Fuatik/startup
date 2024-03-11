@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
-<th:block th:replace="~{layout/main::page(title='Ошибка приложения',appMain=~{::main})}">
+<th:block th:replace="~{layout/main::page(title='err.appError',appMain=~{::main})}">
     <main>
         <div class="text-center">
             <br>
-            <h1 class="my-5 c3">Страница не найдена</h1>
+            <h1 class="my-5 c3" th:text="#{err.pageNotFound}"/>
         </div>
     </main>
 </th:block>

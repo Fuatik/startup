@@ -44,7 +44,7 @@ public class RestExceptionHandler extends BasicExceptionHandler {
         return super.processError(th, path, msg, this::createProblemDetail, () -> {
             HttpStatus status = BasicExceptionHandler.getStatus(intStatus);
             ProblemDetail pd = ProblemDetail.forStatusAndDetail(status, msg);
-            pd.setTitle(ErrorType.of(status).title);
+            pd.setTitle(getMsg(ErrorType.of(status).code));
             pd.setInstance(URI.create(path));
             return pd;
         });
@@ -58,7 +58,7 @@ public class RestExceptionHandler extends BasicExceptionHandler {
     private ProblemDetail createParamsProblemDetail(Throwable ex, String path, ErrorType type, String defaultDetail, @NonNull Map<String, Object> additionalParams) {
         ErrorResponse.Builder builder = ErrorResponse.builder(ex, type.status, defaultDetail);
         ProblemDetail pd = builder
-                .title(type.title).instance(URI.create(path))
+                .title(getMsg(type.code)).instance(URI.create(path))
                 .build().updateAndGetBody(errorMessageHandler.getMessageSource(), LocaleContextHolder.getLocale());
         additionalParams.forEach(pd::setProperty);
         return pd;

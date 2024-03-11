@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
-<th:block th:replace="~{layout/main::page(title='Приложение по курсу Startup', appMain=~{::main},
-descr='Курс Startup: готовый веб-проект для разработки и ведения бизнеса')}">
+<th:block th:replace="~{layout/main::page(title='app.title', appMain=~{::main}, descr='app.descr')}">
     <main>
         <div class="text-center">
-            <h1>Приложение по <a href='https://javaops.ru/view/startup' target="_blank">курсу Startup</a></h1>
+            <h1 th:utext="#{app.welcome}"></h1>
             <img src="/static/img/title/startup.png" class="p-1 my-4 border rounded fit">
-            <h4><a href="/api/admin">API Администратора</a><br>
-                <a href='/view/logout'>Выход</a>
-            </h4>
+            <h4><a href="/api/admin" th:text="#{app.adminAPI}"></a></h4>
         </div>
     </main>
 </th:block>
 </html>
-

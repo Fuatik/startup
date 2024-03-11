@@ -87,6 +87,20 @@ footer a:hover {
     text-decoration: none;
 }
 
+a.link-dark:link {color: var(--c4)!important;}
+a.link-dark:hover {color: var(--c3)!important;}
+a.link-dark:active {color: var(--c4)!important;}
+
+.btn-outline-dark {
+    --bs-btn-color: var(--c4);
+    --bs-btn-border-color: var(--c4);
+    --bs-btn-hover-color: var(--c3);
+    --bs-btn-hover-bg: var(--c1);
+    --bs-btn-hover-border-color: var(--c3);
+    --bs-btn-active-bg: var(--c2);
+    --bs-btn-active-border-color: var(--c4);
+}
+
 /* button */
 .btn-outline-warning {
     --bs-btn-color: var(--c3);

@@ -5,17 +5,17 @@ import org.springframework.http.HttpStatus;
 import java.util.Arrays;
 
 public enum ErrorType {
-    APP_ERROR("Application error", HttpStatus.INTERNAL_SERVER_ERROR),
-    BAD_DATA("Wrong data", HttpStatus.UNPROCESSABLE_ENTITY),
-    BAD_REQUEST("Bad request", HttpStatus.UNPROCESSABLE_ENTITY),
-    DATA_CONFLICT("DataBase conflict", HttpStatus.CONFLICT),
-    NOT_FOUND("Resource not found", HttpStatus.NOT_FOUND),
-    AUTH_ERROR("Authorization error", HttpStatus.FORBIDDEN),
-    UNAUTHORIZED("Request unauthorized", HttpStatus.UNAUTHORIZED),
-    FORBIDDEN("Request forbidden", HttpStatus.FORBIDDEN);
+    APP_ERROR("err.type.appError", HttpStatus.INTERNAL_SERVER_ERROR),
+    BAD_DATA("err.type.badData", HttpStatus.UNPROCESSABLE_ENTITY),
+    BAD_REQUEST("err.type.badRequest", HttpStatus.UNPROCESSABLE_ENTITY),
+    DATA_CONFLICT("err.type.dataConflict", HttpStatus.CONFLICT),
+    NOT_FOUND("err.type.notFound", HttpStatus.NOT_FOUND),
+    AUTH_ERROR("err.type.authError", HttpStatus.FORBIDDEN),
+    UNAUTHORIZED("err.type.unauthorized", HttpStatus.UNAUTHORIZED),
+    FORBIDDEN("err.type.forbidden", HttpStatus.FORBIDDEN);
 
-    ErrorType(String title, HttpStatus status) {
-        this.title = title;
+    ErrorType(String code, HttpStatus status) {
+        this.code = code;
         this.status = status;
     }
 
@@ -23,6 +23,6 @@ public enum ErrorType {
         return Arrays.stream(values()).filter(et -> et.status == status).findAny().orElse(APP_ERROR);
     }
 
-    public final String title;
+    public final String code;
     public final HttpStatus status;
 }

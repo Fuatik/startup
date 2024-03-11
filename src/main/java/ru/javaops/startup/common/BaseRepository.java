@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.transaction.annotation.Transactional;
-import ru.javaops.startup.common.error.NotFoundException;
+import ru.javaops.startup.common.error.I18nException;
+
+import static ru.javaops.startup.common.error.I18nException.ENTITY_NOT_FOUND;
 
 // https://stackoverflow.com/questions/42781264/multiple-base-repositories-in-spring-data-jpa
 @NoRepositoryBean
@@ -21,11 +23,11 @@ public interface BaseRepository<T> extends JpaRepository<T, Integer> {
     @SuppressWarnings("all") // transaction invoked
     default void deleteExisted(int id) {
         if (delete(id) == 0) {
-            throw new NotFoundException("Entity with id=" + id + " not found");
+            throw new I18nException(ENTITY_NOT_FOUND, id);
         }
     }
 
     default T getExisted(int id) {
-        return findById(id).orElseThrow(() -> new NotFoundException("Entity with id=" + id + " not found"));
+        return findById(id).orElseThrow(() -> new I18nException(ENTITY_NOT_FOUND, id));
     }
 }

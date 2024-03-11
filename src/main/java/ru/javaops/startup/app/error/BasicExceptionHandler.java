@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -78,7 +79,7 @@ public class BasicExceptionHandler {
         }
         if (optType.isPresent()) {
             log.error(ERR_PFX + "Exception {} at request {}", ex, path);
-            return processor.process(ex, path, optType.get(), ex.getLocalizedMessage());
+            return processor.process(ex, path, optType.get(), errorMessageHandler.getLocalizedMsg(ex));
         } else {
             log.error(ERR_PFX + "Exception " + ex + " at request " + path, ex);
             return processor.process(ex, path, APP_ERROR, ex.getClass().getSimpleName());
@@ -109,5 +110,9 @@ public class BasicExceptionHandler {
     public static Throwable getRootCause(@NonNull Throwable t) {
         Throwable rootCause = NestedExceptionUtils.getRootCause(t);
         return rootCause != null ? rootCause : t;
+    }
+
+    public String getMsg(String code) {
+        return errorMessageHandler.getMessageSource().getMessage(code, null, LocaleContextHolder.getLocale());
     }
 }
