@@ -27,8 +27,11 @@
 
         <tr th:each="row,iter: ${result.rows}">
             <td th:text="${iter.count}"></td>
-            <th:block th:each="item: ${row}">
-                <td th:utext="${item}" th:nowrap="${param.wrap==null}"></td>
+            <th:block th:each="item: ${row}" th:with="i18n=${#strings.substringAfter(item, '{i18n}')}">
+                <td th:if="${i18n!=null}">
+                    <span data-bs-toggle="tooltip" th:title="#{${i18n}}" th:utext="${#strings.substringBefore(item, '{i18n}')}"></span>
+                </td>
+                <td th:if="${i18n==null}" th:utext="${item}" th:nowrap="${param.wrap==null}"></td>
             </th:block>
         </tr>
         </tbody>
@@ -39,6 +42,7 @@
 <script src="/static/datatables/jquery.dataTables.min.js"></script>
 <script src="/static/datatables/dataTables.bootstrap5.min.js"></script>
 <script src="/static/datatables/fixedHeader.bootstrap5.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.min.js" defer></script>
 <script>
     $(function () {
         new DataTable('#table', {
@@ -50,6 +54,20 @@
                 "url": "/static/datatables/i18n/[[${#locale.language}]].json"
             },
         });
+        // https://getbootstrap.com/docs/5.3/components/tooltips/
+        const tooltipsEl = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltips = [...tooltipsEl].map(el => new bootstrap.Tooltip(el,{}))
     });
+
+    function enable(url, param, sb) {
+        const enabled = sb.is(':checked');
+        $.ajax({
+            url: '/api/admin/' + url + '/' + param + '?enabled=' + enabled,
+            type: 'PATCH'
+        }).fail(function (jqXHR, textStatus) {
+            alert("Failed: " + textStatus);
+            sb.prop("checked", !enabled);
+        })
+    }
 </script>
 </html>
